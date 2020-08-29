@@ -3,6 +3,10 @@ import logging
 from flask import Flask
 import dotenv
 
+from library.flask.logging import FlaskLogging
+
+from middleware.dbConnect import DBConnect
+
 dotenv.load_dotenv()
 
 debug_mode = True if os.getenv('DEBUG_MODE') == '1' else False
@@ -10,10 +14,8 @@ debug_mode = True if os.getenv('DEBUG_MODE') == '1' else False
 if debug_mode:
     logging.basicConfig(level=logging.DEBUG)
 
-from library.flask.logging import FlaskLogging
-
 app = Flask(__name__)
-# app.wsgi_app = 'db-conn'
+app.wsgi_app = DBConnect(app.wsgi_app)
 
 app.add_url_rule('/logging', view_func=FlaskLogging.get, endpoint='logging_get', methods=['GET'])
 
