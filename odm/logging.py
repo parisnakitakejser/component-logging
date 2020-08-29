@@ -10,8 +10,8 @@ class LoggingData(EmbeddedDocument):
 
 class Logging(Document):
     number = SequenceField()
-    identifier = StringField(required=True)
-    environment = StringField(required=True)
+    identifier = StringField(required=True, max_length=32)
+    environment = StringField(required=True, max_length=32)
 
     data = EmbeddedDocumentField(LoggingData)
 
@@ -23,3 +23,9 @@ class Logging(Document):
 
     created_at = DateTimeField()
     deleted_at = DateTimeField()
+
+    meta = {
+        'indexes': [{
+            'fields': ['binds', 'identifier', 'environment']
+        }]
+    }

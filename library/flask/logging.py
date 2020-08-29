@@ -11,3 +11,19 @@ class FlaskLogging:
         return Response(dumps({
             'status': 'OK'
         }), mimetype='text/json'), 200
+
+    @staticmethod
+    def create():
+        logging.debug('FlaskLogging.create - request hit')
+
+        return Response(dumps({
+            'status': 'OK'
+        }), mimetype='text/json'), 200
+
+    @staticmethod
+    def remove():
+        logging.debug('FlaskLogging.remove - request hit')
+
+        return Response(dumps({
+            'status': 'OK'
+        }), mimetype='text/json'), 200
