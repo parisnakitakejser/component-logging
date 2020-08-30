@@ -2,7 +2,7 @@ from mongoengine import EmbeddedDocument, StringField
 
 
 class Author(EmbeddedDocument):
-    name = StringField()
+    name = StringField(required=True)
     identifier = StringField()
     ipv4 = StringField()
     ipv6 = StringField()

@@ -3,9 +3,9 @@ from odm.author import Author
 
 
 class LoggingData(EmbeddedDocument):
-    summary = StringField()
+    summary = StringField(required=True)
     description = StringField()
-    created_at = DateTimeField()
+    created_at = DateTimeField(required=True)
 
 
 class Logging(Document):
@@ -15,8 +15,8 @@ class Logging(Document):
 
     data = EmbeddedDocumentField(LoggingData)
 
-    tags = ListField()
-    binds = ListField()
+    tags = ListField(StringField())
+    binds = ListField(StringField(), required=True)
 
     author = EmbeddedDocumentField(Author)
     system = BooleanField(default=False)
@@ -25,6 +25,8 @@ class Logging(Document):
     deleted_at = DateTimeField()
 
     meta = {
+        'auto_create_index': True,
+        'index_background': True,
         'indexes': [{
             'fields': ['binds', 'identifier', 'environment']
         }]
