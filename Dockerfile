@@ -1,4 +1,4 @@
-FROM python:3.8-alphine
+FROM python:3.8-alpine
 
 EXPOSE 5000/tcp
 
@@ -8,5 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 RUN rm -rf .env
+RUN rm -rf tools
 
 CMD ["python", "./app.py"]
