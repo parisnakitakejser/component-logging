@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from mongoengine import DoesNotExist
 
@@ -83,3 +84,58 @@ class Logging:
         else:
             return False, 'You did not have the right access to delete this log message'
 
+    @staticmethod
+    def get(data: dict, identifier: str, environment: str) -> (bool, list, str):
+        pipeline = []
+
+        if 'binds' not in data or type(data['binds']) != str or len(data['binds'].split(',')) == 0:
+            return False, [], 'binds missing data or incorrect format'
+
+        limit = 100
+        skip = 0
+
+        if 'limit' in data:
+            try:
+                limit = int(data['limit'])
+                logging.info(f'limit cast to int value: {limit}')
+            except Exception as e:
+                return False, [], 'limit need to be a int value'
+
+            if limit < 1 or limit > 1000:
+                return False, [], 'limit need to be between 1-1000'
+
+        if 'skip' in data:
+            try:
+                skip = int(data['skip'])
+            except Exception as e:
+                return False, [], 'skip need to be a int value'
+
+            if skip < 0:
+                return False, [], 'skip shut be equal or greater then 0'
+
+        pipeline.append({
+            '$match': {
+                'binds': {
+                    '$in': data['binds'].split(',')
+                },
+                'deleted_at': {
+                    '$exists': False
+                }
+            }
+        })
+
+        pipeline.append({
+            '$sort': {
+                'data.created_at': -1
+            }
+        })
+
+        pipeline.append({
+            '$skip': (skip * limit)
+        })
+
+        pipeline.append({
+            '$limit': limit
+        })
+
+        return True, OdmLogging.objects(identifier=identifier, environment=environment).aggregate(pipeline), 'success mongo query'

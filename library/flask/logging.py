@@ -26,9 +26,21 @@ class FlaskLogging:
     def get() -> (Response, int):
         logging.debug('FlaskLogging.get - request hit')
 
-        return Response(dumps({
-            'status': 'OK'
-        }), mimetype='text/json'), 200
+        identifier = request.headers.get('X-IDENTIFIER')
+        environment = request.headers.get('X-ENVIRONMENT')
+
+        response, content, msg = Logging.get(data=request.args, identifier=identifier, environment=environment)
+
+        if response:
+            return Response(dumps({
+                'status': 'OK',
+                'content': content,
+            }), mimetype='text/json'), 200
+        else:
+            return Response(dumps({
+                'status': 'Expectation Failed',
+                'msg': msg
+            }), mimetype='text/json'), 417
 
     @staticmethod
     def create() -> (Response, int):
