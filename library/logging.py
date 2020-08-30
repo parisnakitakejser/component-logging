@@ -1,11 +1,13 @@
 from datetime import datetime
+from mongoengine import DoesNotExist
 
 from odm.logging import Logging as OdmLogging, LoggingData as OdmLoggingData
 from odm.author import Author as OdmAuthor
 
+
 class Logging:
     @staticmethod
-    def insert(data: dict, identifier: str, environment: str):
+    def insert(data: dict, identifier: str, environment: str) -> (bool, str):
         if 'created_at' not in data or not data['created_at']:
             created_at = datetime.utcnow()
         else:
@@ -65,3 +67,19 @@ class Logging:
         log.save()
 
         return True, 'Insert log message success'
+
+    @staticmethod
+    def remove(log_id: str, identifier: str, environment: str) -> (bool, str):
+        try:
+            log = OdmLogging.objects.get(pk=log_id)
+        except DoesNotExist:
+            return False, 'Log message not found'
+
+        if log.identifier == identifier and log.environment == environment:
+            log.update(**{
+                'set__deleted_at': datetime.utcnow()
+            })
+            return True, 'Log message success removed'
+        else:
+            return False, 'You did not have the right access to delete this log message'
+
