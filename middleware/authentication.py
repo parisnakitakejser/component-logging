@@ -10,6 +10,12 @@ class Authentication:
         self.app = app
 
     def __call__(self, environ, start_response):
+        request = Request(environ)
+
+        if request.path.startswith('/docs') or request.path.startswith('/static'):
+            logging.debug('Serving the doc')
+            return self.app(environ, start_response)
+
         try:
             identifier = environ.get('HTTP_X_IDENTIFIER')
             environment = environ.get('HTTP_X_ENVIRONMENT')

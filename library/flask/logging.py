@@ -24,6 +24,52 @@ class FlaskLogging:
 
     @staticmethod
     def get() -> (Response, int):
+        """
+        Select logs
+        ---
+        parameters:
+        - in: header
+          name: X-IDENTIFIER
+          required: true
+          type: string
+
+        - in: header
+          name: X-ENVIRONMENT
+          required: true
+          type: string
+
+        - in: header
+          name: X-SECRET-KEY
+          required: true
+          type: string
+
+        - in: query
+          name: binds
+          required: true
+          description: using multiply id's, separated it by comma
+          type: string
+
+        - in: query
+          name: limit
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 0
+
+        - in: query
+          name: skip
+          type: integer
+          default: 0
+
+
+        responses:
+          200:
+            description: OK
+
+          417:
+            description: Expectation Failed
+        """
+
         logging.debug('FlaskLogging.get - request hit')
 
         identifier = request.headers.get('X-IDENTIFIER')
@@ -44,6 +90,65 @@ class FlaskLogging:
 
     @staticmethod
     def create() -> (Response, int):
+        """
+        Insert new log
+        ---
+        parameters:
+        - in: header
+          name: X-IDENTIFIER
+          required: true
+          type: string
+
+        - in: header
+          name: X-ENVIRONMENT
+          required: true
+          type: string
+
+        - in: header
+          name: X-SECRET-KEY
+          required: true
+          type: string
+
+        - in: body
+          name: single log entry
+          schema:
+            type: object
+            properties:
+              summary:
+                type: string
+              description:
+                type: string
+              created_at:
+                type: string
+              tags:
+                type: array
+                items:
+                  type: string
+              binds:
+                type: array
+                items:
+                  type: string
+              system:
+                type: boolean
+              author:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  identifier:
+                    type: string
+                  ipv4:
+                    type: string
+                  ipv6:
+                    type: string
+        responses:
+          200:
+            description: OK
+
+          417:
+            description: Expectation Failed
+        """
+
         logging.debug('FlaskLogging.create - request hit')
 
         identifier = request.headers.get('X-IDENTIFIER')
@@ -56,6 +161,42 @@ class FlaskLogging:
 
     @staticmethod
     def remove() -> (Response, int):
+        """
+        Remove a single log
+        ---
+        parameters:
+          - in: header
+            name: X-IDENTIFIER
+            required: true
+            schema:
+              type: string
+
+          - in: header
+            name: X-ENVIRONMENT
+            required: true
+            type: string
+
+          - in: header
+            name: X-SECRET-KEY
+            required: true
+            type: string
+
+          - in: query
+            name: id
+            required: true
+            type: string
+
+        responses:
+          200:
+            description: OK
+
+          404:
+            description: Not Found
+
+          417:
+            description: Expectation Failed
+        """
+
         logging.debug('FlaskLogging.remove - request hit')
 
         identifier = request.headers.get('X-IDENTIFIER')
