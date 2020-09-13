@@ -9,7 +9,7 @@
 **🌟 Community 🌟**
 
 - Subscribe my channel: https://www.youtube.com/c/ParisNakitaKejser?sub_confirmation=1
-- Youtube playlist: (coming soon)
+- Youtube playlist: https://www.youtube.com/playlist?list=PLLhEJK7fQIxAPNfNxMlLAm4AQm1hE_W4P
 - Private website: https://www.pnk.sh
 - Discord: https://discord.gg/6tcWjxV
 - Donate: https://www.patreon.com/parisnakitakejser
