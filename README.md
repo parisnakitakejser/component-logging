@@ -14,6 +14,10 @@
 - Discord: https://discord.gg/6tcWjxV
 - Donate: https://www.patreon.com/parisnakitakejser
 
+**Project features**
+- Select log entrys
+- Insert log entry
+- Remove log entry
 
 **System environments to set**
 
